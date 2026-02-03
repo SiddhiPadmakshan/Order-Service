@@ -1,166 +1,107 @@
 # Order Service – Spring Boot Backend Application
 
-A production-style backend service built with Java 17 and Spring Boot, designed to manage orders with clear business rules, lifecycle validation, event publishing, and paginated APIs.
+A production-style backend service built using **Java 17** and **Spring Boot**, designed to manage orders with a complete lifecycle, validation, event publishing, and pagination support.
 
-This project demonstrates clean backend architecture, domain-driven thinking, and real-world API design, leaving room for future scalability (event-driven systems, Kafka, CI/CD).
+This project demonstrates real-world backend engineering practices including layered architecture, domain-driven design concepts, and clean separation of concerns.
 
-🚀 Features
-✅ Order Management
+---
 
-Create orders with validation
+## 🚀 Features
 
-Retrieve all orders
+- Create and manage orders
+- Enforced order lifecycle transitions (PENDING → CONFIRMED → DISPATCHED → DELIVERED)
+- Domain event publishing for:
+  - Order creation
+  - Order status changes
+- Global exception handling with meaningful error responses
+- Request & response DTOs
+- Pagination and sorting support
+- Input validation using Bean Validation (Jakarta Validation)
+- Clean REST API design
 
-Retrieve orders with pagination and sorting
+---
 
-Update order status with strict lifecycle rules
+## 🛠 Tech Stack
 
-🔁 Order Lifecycle Enforcement
+- **Java 17**
+- **Spring Boot 3**
+- Spring Web
+- Spring Data JPA
+- Hibernate
+- PostgreSQL
+- Maven
+- Lombok
+- Postman (API testing)
 
-Valid state transitions are enforced at the business logic level:
+---
 
-PENDING → CONFIRMED → DISPATCHED → DELIVERED
+## 🧱 Project Architecture
 
+The application follows a standard layered backend architecture:
 
-Invalid transitions are blocked with meaningful error responses.
+controller → service → repository → database
 
-📣 Event Publishing (Level 1 – In-Process)
+Additional layers:
+- `dto` – API contracts (request / response)
+- `events` – domain event publishing
+- `exception` – global error handling
+- `model` – JPA entities and enums
 
-Domain events are published when:
+This structure keeps business logic decoupled from infrastructure and presentation layers.
 
-An order is created
+---
 
-An order status changes
+## 📦 API Endpoints
 
-Example logs:
+### Create Order
 
-EVENT: OrderCreated | orderId=7 | product=iPhone 15 | quantity=2 | amount=1.0
-EVENT: OrderStatusChanged | orderId=3 | CONFIRMED → DISPATCHED
+controller → service → repository → database
 
-
-This prepares the service for future event-driven architectures (Kafka, messaging systems).
-
-📄 Pagination & Sorting
-
-The API supports paginated and sorted responses using Spring Data:
+### Get All Orders (Paginated & Sorted)
 
 GET /api/orders?page=0&size=5&sort=id,desc
 
+### Get Order by ID
 
-Returns structured metadata:
+GET /api/orders/{id}
 
-total pages
+### Update Order Status
 
-total elements
+---
 
-current page
+## 🔁 Order Lifecycle Rules
 
-sorted content
+- `PENDING` → `CONFIRMED` or `CANCELLED`
+- `CONFIRMED` → `DISPATCHED` or `CANCELLED`
+- `DISPATCHED` → `DELIVERED`
+- Invalid transitions are rejected with clear error messages
 
-🛑 Robust Error Handling
+---
 
-Centralised exception handling using @RestControllerAdvice
+## 📣 Domain Events
 
-Clean, client-friendly error responses
+The service publishes domain-level events when:
 
-Validation errors returned as field-level messages
+- An order is created
+- An order status changes
 
-Example:
+Example log output:
 
-{
-  "productName": "Product name is required",
-  "quantity": "Quantity must be at least 1"
-}
+EVENT: OrderStatusChanged | orderId=3 | CONFIRMED → DISPATCHED | at=2025-12-31T12:20:26Z
 
-🛠️ Tech Stack
+This design prepares the system for asynchronous processing (e.g. Kafka integration).
 
-Backend
+---
 
-Java 17
+## ⚙️ Running the Application
 
-Spring Boot 3.x
+### Prerequisites
+- Java 17+
+- Maven
+- PostgreSQL running locally
 
-Spring Data JPA
-
-Hibernate
-
-Database
-
-PostgreSQL
-
-Validation & APIs
-
-Jakarta Validation
-
-RESTful API design
-
-DTO-based request/response separation
-
-Tooling
-
-Maven
-
-Postman
-
-Git / GitHub
-
-🧱 Project Structure
-src/main/java/com/siddhi/orderservice
-│
-├── controller        # REST API endpoints
-├── service           # Business logic & rules
-├── repository        # Data access (JPA)
-├── model             # Entities & enums
-├── dto               # Request & response DTOs
-├── events             # Domain events & publishers
-├── exception         # Custom exceptions & handlers
-└── config            # Application configuration
-
-📌 Key Design Decisions
-
-DTOs used to decouple API contracts from persistence models
-
-Business rules enforced in the service layer (not controllers)
-
-Events introduced early to support scalability
-
-Pagination used to protect APIs from large datasets
-
-Centralised error handling for maintainability
-
-🔮 Planned Enhancements
-
-Kafka-based event publishing (Level 1)
-
-CI/CD pipeline (build + test)
-
-API documentation (OpenAPI / Swagger)
-
-Security (role-based access)
-
-🧠 What This Project Demonstrates
-
-Backend engineering fundamentals
-
-Real-world Spring Boot patterns
-
-Clean separation of concerns
-
-Production-style error handling
-
-Readiness for distributed systems
-
-▶️ Running the Application
+### Steps
+```bash
 mvn spring-boot:run
 
-
-The API will be available at:
-
-http://localhost:8080
-
-📬 Sample Endpoints
-POST    /api/orders
-GET     /api/orders
-GET     /api/orders?page=0&size=5&sort=id,desc
-PUT     /api/orders/{id}/status
-
+The service will start on: http://localhost:8080
