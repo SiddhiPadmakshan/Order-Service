@@ -6,7 +6,7 @@ This project demonstrates real-world backend engineering practices including lay
 
 ---
 
-## 🚀 Features
+## Features
 
 - Create and manage orders
 - Enforced order lifecycle transitions (PENDING → CONFIRMED → DISPATCHED → DELIVERED)
@@ -21,7 +21,7 @@ This project demonstrates real-world backend engineering practices including lay
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Java 17**
 - **Spring Boot 3**
@@ -35,7 +35,7 @@ This project demonstrates real-world backend engineering practices including lay
 
 ---
 
-## 🧱 Project Architecture
+## Project Architecture
 
 The application follows a standard layered backend architecture:
 
@@ -51,7 +51,7 @@ This structure keeps business logic decoupled from infrastructure and presentati
 
 ---
 
-## 📦 API Endpoints
+## API Endpoints
 
 ### Create Order
 
@@ -69,7 +69,7 @@ GET /api/orders/{id}
 
 ---
 
-## 🔁 Order Lifecycle Rules
+## Order Lifecycle Rules
 
 - `PENDING` → `CONFIRMED` or `CANCELLED`
 - `CONFIRMED` → `DISPATCHED` or `CANCELLED`
@@ -78,7 +78,7 @@ GET /api/orders/{id}
 
 ---
 
-## 📣 Domain Events
+## Domain Events
 
 The service publishes domain-level events when:
 
@@ -93,7 +93,7 @@ This design prepares the system for asynchronous processing (e.g. Kafka integrat
 
 ---
 
-## ⚙️ Running the Application
+## Running the Application
 
 ### Prerequisites
 - Java 17+
@@ -105,3 +105,15 @@ This design prepares the system for asynchronous processing (e.g. Kafka integrat
 mvn spring-boot:run
 
 The service will start on: http://localhost:8080
+
+## Testing
+
+APIs were tested using Postman.
+Validation and error scenarios are handled centrally via a global exception handler.
+
+## Future Improvements
+- Kafka integration for real event streaming
+- CI/CD pipeline
+- Unit and integration tests
+- Swagger / OpenAPI documentation
+- Docker support
