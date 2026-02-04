@@ -104,7 +104,7 @@ This design prepares the system for asynchronous processing (e.g. Kafka integrat
 ```bash
 mvn spring-boot:run
 
-The service will start on: http://localhost:8080
+The service will start on: http://localhost:8081
 ```
 
 ## Testing
